@@ -2,8 +2,7 @@ from dotenv import load_dotenv
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 import os 
-
-
+from langchain_ollama import ChatOllama
 
 load_dotenv()
 
@@ -29,8 +28,10 @@ def main():
     summary_prompt_template= PromptTemplate( input_variables=["information"],
     template=summary_template
     )
-    llm= ChatOpenAI(model="gpt-5", temperature=0) ## temperature 0 is the most accurate model // define the randomness of the model, between 0 and 0.3 the model is deterministic and factual, good for summarization, 
+   # llm= ChatOpenAI(model="gpt-5", temperature=0) ## temperature 0 is the most accurate model // define the randomness of the model, between 0 and 0.3 the model is deterministic and factual, good for summarization, 
     ### high values of temperature are good for creativity and brainstorming, good for poetry, stories, etc.
+    # openai doesnt work because i dont have enough credits
+    llm=ChatOllama(temperature=0, model="gemma3:270m")
     chain= summary_prompt_template | llm ### format the prompt template and then pass it to the llm as a result
     response= chain.invoke(input={"information": information})
     print(response.content)
